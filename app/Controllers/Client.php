@@ -1,0 +1,134 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Controllers\BaseController;
+use App\Models\ClientModel;
+use App\Models\ClientRecordsModel;
+use App\Models\PaymentMethodModel;
+
+class Client extends BaseController
+{
+    public function index()
+    {
+
+        $model = new ClientRecordsModel();
+        $clientModel = new ClientModel();
+        $paymentMethods = new PaymentMethodModel();
+        $clients = $model->getAllClients();
+        //dd($clients);
+        //dd($clientModel->getTotal());
+        return view("Client/index",
+        [
+            'clients' => $clients,
+            'total' => $clientModel->getTotal(),
+            'paymentMethods' => $paymentMethods->findAll()
+        ]
+        );
+    }
+
+    public function new()
+    {
+        return view("Client/new");
+    }
+
+    public function addClient()
+    {
+        $clientModel = new ClientModel();
+        $result = $clientModel->insert([
+            'name' =>  $this->request->getPost("client_name"),
+            'phone_number' => $this->request->getPost("phone_number")
+        ]);
+        if ($result === false){
+            return redirect()->to('/clients')->with('errors', $clientModel->errors());
+        }else{
+            return redirect()->back()->with('info', 'تم تسجيل العميل بنجاح');
+            //dd($model->getInsertID());
+        }
+    }
+
+    public function show($id)
+    {
+        $clientModel = new ClientModel();
+        $client = $clientModel->find($id);
+        $clientRecords = new ClientRecordsModel();
+        $data = $clientRecords->getClientHistory($id);
+        $this->cachePage(21600);
+       // dd($data);
+        return view("Client/show", [
+            'clientName' => $client->name,
+            'clientPhone' => $client->phone_number,
+            'amount' => $client->amount,
+            'data' => $data,
+            'pager' => $clientRecords->pager
+        ]);
+    }
+
+    public function getClientByName()
+    {
+        $clientModel = new ClientModel();
+        $clientId = $clientModel->getUserId($this->request->getPost("client_name_2"));
+        if ($clientId === null){
+            return redirect()->back()->with('errors', 'العميل غير مسجل');
+        }
+        return redirect()->to('/clients/' . $clientId);
+    }
+
+    public function create()
+    {
+        $clientModel = new ClientModel();
+
+        $clientId = $clientModel->getUserId($this->request->getPost("client_name"));
+        if ($clientId === null){
+            return redirect()->back()->with('errors', 'العميل غير مسجل');
+        }
+        $model = new ClientRecordsModel();
+
+        $result = $model->insert([
+                'client_id' => $clientId,
+                'amount_due' => $this->request->getPost("amount_due")
+        ]);
+
+        if ($result === false){
+            return redirect()->to('/clients')->with('errors', $model->errors());
+        }else{
+           $clientModel->update($clientId, [
+               'amount' => $this->request->getPost("amount_due") + $clientModel->getAmount($clientId)
+           ]);
+           return redirect()->back()->with('info', 'تم التسجيل بنجاح');
+           //dd($model->getInsertID());
+        }
+
+    }
+
+    public function paid()
+    {
+        $clientModel = new ClientModel();
+
+        $clientId = $clientModel->getUserId($this->request->getPost("client_name_pay"));
+        $model = new ClientRecordsModel();
+
+        $result = $model->insert([
+            'client_id' => $clientId,
+            'amount_paid' => $this->request->getPost("amount_paid"),
+            'payment_method_id' => $this->request->getPost('payment_method')
+        ]);
+
+        if ($result === false){
+            return redirect()->to('/clients')->with('errors', $model->errors());
+        }else{
+            $clientModel->update($clientId, [
+                'amount' => $clientModel->getAmount($clientId) - $this->request->getPost("amount_paid")
+            ]);
+            return redirect()->to('/clients');
+            //dd($model->getInsertID());
+        }
+    }
+
+    public function search()
+    {
+        $model = new ClientModel();
+        $customers = $model->search($this->request->getGet('q'));
+        return $this->response->setJSON($customers);
+    }
+}
