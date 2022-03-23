@@ -19,6 +19,8 @@ if (! function_exists('size_name')){
     }
 }
 
+
+
 if (! function_exists('getSizeName')){
     function getSizeName($id){
         $model = new \App\Models\ProductSizeModel();

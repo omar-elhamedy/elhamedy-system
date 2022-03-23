@@ -62,6 +62,7 @@ $routes->get('/suppliers/search', 'Supplier::search');
 /* POST */
 $routes->post('/suppliers/new/add', 'Supplier::add');
 $routes->post('/suppliers/supply', 'Supplier::supply');
+$routes->post('suppliers/prices/update', 'Supplier::update');
 
 /*
  * --------------------------------------------------------------------
@@ -99,7 +100,9 @@ $routes->get('/settings', 'Settings::index');
 /* GET */
 $routes->get('/inv', 'Inventory::index');
 $routes->get('/inv/suppliers', 'Inventory::suppliers');
-
+$routes->add('/inv/delete/(:num)', 'Inventory::delete/$1');
+$routes->get('/inv/edit/(:num)', 'Inventory::edit/$1');
+$routes->post('/inv/update/(:num)', 'Inventory::update/$1');
 
 /*
  * --------------------------------------------------------------------

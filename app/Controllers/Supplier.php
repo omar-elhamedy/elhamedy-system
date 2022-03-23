@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\ProductMetaModel;
+use App\Models\ProductModel;
 use App\Models\SupplierModel;
 use App\Models\SupplierProductModel;
 
@@ -60,6 +61,55 @@ class Supplier extends BaseController
 
     }
 
+    public function update()
+    {
+        $productModel = new ProductModel();
+
+        foreach ($this->request->getPost() as $key=>$values){
+            if ($key != 'type'){
+                $update = $productModel->update($key, [
+                    'price' => $values
+                ]);
+                return $this->redirect($update, $productModel);
+            } else {
+                if ($key === 'type'){
+                    foreach ($values as $type =>$value){
+
+                        if (isset($value['sizes'])){
+                            foreach ($value['sizes'] as $size => $price){
+                                $update = $productModel->updateAllWithTypeAndSize($price,$type,$size);
+                                return $this->redirect($update, $productModel);
+                            }
+
+                        } elseif (isset($value['colors'])){
+                            foreach ($value['colors'] as $color => $price){
+                                $update =  $productModel->updateAllWithTypeAndColor($price, $type, $color);
+
+                                return $this->redirect($update, $productModel);
+                            }
+                        }
+                    }
+                } elseif ($key === 'sizes'){
+                    foreach ($values as $size => $price){
+                        $update = $productModel->updateAllWithSize($price, $size);
+                        return $this->redirect($update, $productModel);
+                    }
+                } elseif ($key === 'colors'){
+                    foreach ($values as $color => $price){
+                        $update =  $productModel->updateAllWithColor($price, $color);
+                        return $this->redirect($update, $productModel);
+                    }
+                }
+            }
+
+            return redirect()
+                ->back()
+                ->with('info', 'تم تحديث الاسعار');
+
+        }
+
+    }
+
     public function view($supplierID)
     {
         $model = new SupplierModel();
@@ -84,5 +134,19 @@ class Supplier extends BaseController
         $model = new SupplierModel();
         $customers = $model->search($this->request->getGet('q'));
         return $this->response->setJSON($customers);
+    }
+
+    public function redirect(bool $update, ProductModel $productModel): \CodeIgniter\HTTP\RedirectResponse
+    {
+        if (!$update) {
+            return redirect()
+                ->back()
+                ->with('error', $productModel->errors())
+                ->with('warning', 'خطأ بالتحديث');
+        } else {
+            return redirect()
+                ->back()
+                ->with('info', 'تم تحديث الاسعار');
+        }
     }
 }

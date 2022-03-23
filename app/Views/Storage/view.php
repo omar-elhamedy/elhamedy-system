@@ -113,12 +113,9 @@
         <tr>
 
             <th scope="col">اسم المنتج</th>
-            <th scope="col">الخامة</th>
-            <th scope="col">الماركة</th>
-            <th scope="col">المقاس</th>
-            <th scope="col">اللون</th>
-            <th scope="col">النوع</th>
+
             <th scope="col">الكمية</th>
+            <th scope="col">سعر الوحدة</th>
             <th scope="col">قيمة المنتج</th>
             <th scope="col">العملية</th>
 
@@ -135,17 +132,13 @@
         <?php foreach ($products as $product): ?>
 
 
-
                 <tr style="vertical-align:middle;">
 
                     <td><a href="<?= site_url('storage/products/' . $product->id) ?>" class="link-primary" style="text-decoration: none"><?= $product->name ?></a></td>
-                    <td><?= getMaterialName($product->material_id) ?></td>
-                    <td><?= getBrandName($product->brand_id) ?></td>
-                    <td><?= getSizeName($product->size_id) ?></td>
-                    <td><?= getColorName($product->color_id) ?></td>
-                    <td><?= getTypeName($product->type_id) ?></td>
-                    <td><?= $product->QTY ?></td>
-                    <td>20</td>
+
+                    <td><?= $product->QTY . ' ' . getUnitName($product->unit_id) ?></td>
+                    <td><?= getPriceOf($product->id) .' جنيه' ?></td>
+                    <td><?= getPriceOf($product->id)*$product->QTY .' جنيه' ?></td>
                     <td>
                         <div class="btn-toolbar" role="group">
                              <button type="submit" class="btn btn-danger mb-3 mx-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop-<?=$product->id?>">سحب</button>

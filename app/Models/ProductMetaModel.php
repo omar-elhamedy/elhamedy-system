@@ -61,6 +61,7 @@ class ProductMetaModel extends Model
         return count($this->where('storage_id', $storage_id)->asArray()->findAll());
     }
 
+
     public function createNewColorProduct($newColor): bool
     {
         $productModel = new ProductModel();
@@ -192,6 +193,38 @@ class ProductMetaModel extends Model
 
         }
         $this->cleanProducts($id);
+        return true;
+    }
+
+    public function generateNames($product)
+    {
+        $material = getMaterialName($product->material_id);
+        $brand = getBrandName($product->brand_id);
+        $type = getTypeName($product->type_id);
+        $unit = getUnitName($product->unit_id);
+
+        if ($product->color_id === '1'){
+            $color = 'ابيض و اسود';
+        } else if ($product->color_id === '0'){
+            $color = 'جميع الالوان';
+        } else {
+            $color = 'لا يوجد لون';
+        }
+        $sizeModel = new \App\Models\SizeCollectionModel();
+        $sizeCollection = $sizeModel->find($product->size_collection_id)->name;
+
+
+        return "$material-$brand-$type-$unit-$color-$sizeCollection";
+    }
+    public function updateNameOf($id): bool
+    {
+
+        $name = $this->generateNames($this->find($id));
+
+        $this->update($id, [
+            'name' => $name
+        ]);
+
         return true;
     }
 

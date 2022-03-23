@@ -26,7 +26,8 @@ class ProductModel extends Model
         'QTY',
         'storage_id',
         'created_at_product',
-        'updated_at_product'
+        'updated_at_product',
+        'price'
     ];
 
     // Dates
@@ -73,6 +74,10 @@ class ProductModel extends Model
         return $this->where('meta_id', $metaID)->groupBy('size_id')->findAll();
     }
 
+    public function getAllMetaProductsCount($metaID)
+    {
+        return $this->where('meta_id', $metaID)->countAllResults();
+    }
 
     public function getAllProductsInStorage($storageId)
     {
@@ -97,7 +102,7 @@ class ProductModel extends Model
 
     public function paginateAllProductsInStorage($storageId)
     {
-        return $this->where('storage_id', $storageId)->paginate();
+        return $this->where('storage_id', $storageId)->where('QTY >', 0)->paginate();
     }
 
     public function sortBy($storageId, mixed $getGet)
@@ -134,6 +139,95 @@ class ProductModel extends Model
             return true;
         }
         return false;
+    }
+
+    public function getMetaProductsWithQTYCount($metaID)
+    {
+        return $this->where('meta_id', $metaID)->where('QTY >', '0')->countAllResults();
+    }
+
+    public function updateUnitAndStorage($id): bool
+    {
+        $items = $this->where('meta_id', $id)->findAll();
+        $productMetaModel = new ProductMetaModel();
+        $productMetaModel->find($id);
+        foreach ($items as $item){
+            $this->update($item->id, [
+                'name' => getMaterialName($item->material_id) . ' ' . getBrandName($item->brand_id) . ' ' . getSizeName($item->size_id) . ' ' . getColorName($item->color_id) . ' ' . getTypeName($productMetaModel->find($id)->type_id),
+               'unit_id ' => $productMetaModel->find($id)->unit_id,
+               'storage_id' => $productMetaModel->find($id)->storage_id
+            ]);
+        }
+
+        return true;
+    }
+
+    public function getAllMetaProducts($metaID)
+    {
+        return $this->where('meta_id', $metaID)->findAll();
+    }
+
+    public function updateAllWithTypeAndSize(string $price, int|string $type, int|string $size)
+    {
+        foreach ($this->where('type_id', $type)->where('size_id', $size)->findAll() as $item){
+           $result =  $this->update($item->id, [
+                'price' => $price
+            ]);
+           if ($result){
+               continue;
+           }else{
+               return false;
+           }
+        }
+        return true;
+    }
+
+    public function updateAllWithTypeAndColor($price,$type,$color)
+    {
+        dd($this->where('type_id', $type)->findAll());
+
+        foreach ($this->where('type_id', $type)->where('color_id', $color)->findAll() as $item){
+
+            $result =  $this->update($item->id, [
+                'price' => $price
+            ]);
+            if ($result){
+                continue;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function updateAllWithColor(string $price, int|string $color)
+    {
+        foreach ($this->where('color_id', $color)->findAll() as $item){
+            $result =  $this->update($item->id, [
+                'price' => $price
+            ]);
+            if ($result){
+                continue;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function updateAllWithSize(string $price, int|string $size)
+    {
+        foreach ($this->where('size_id', $size)->findAll() as $item){
+            $result =  $this->update($item->id, [
+                'price' => $price
+            ]);
+            if ($result){
+                continue;
+            }else{
+                return false;
+            }
+        }
+        return true;
     }
 
 

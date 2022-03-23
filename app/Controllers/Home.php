@@ -5,6 +5,8 @@ namespace App\Controllers;
 
 
 use CodeIgniter\HTTP\CURLRequest;
+use Config\Services;
+use voku\helper\HtmlDomParser;
 
 class Home extends BaseController
 {
@@ -15,24 +17,12 @@ class Home extends BaseController
 
     public function currency()
     {
-        $app_id = '64a0e30b9e6d4623806fe4a5d3d42e19';
-        $oxr_url = "https://openexchangerates.org/api/latest.json?app_id=" . $app_id . "&base=USD&symbols=EGP";
 
-        $options = [
-            'baseURI' => 'https://openexchangerates.org/api/latest.json',
-            'timeout'  => 3,
-        ];
-        $curl = new curlRequest(
-            new \Config\App(),
-            new \CodeIgniter\HTTP\URI(),
-            new \CodeIgniter\HTTP\Response(new \Config\App()),
-            $options
-        );
-        $response = $curl->request('GET', $oxr_url);
-
+        $dom = HtmlDomParser::file_get_html('https://www.cbe.org.eg/ar/EconomicResearch/Statistics/Pages/ExchangeRatesListing.aspx');
+        $element = $dom->getElementByClass('table')->innerHtml();
 
         return view('Stats/currency', [
-            'data' => json_decode($response->getBody())
+            'data' => $element
         ]);
     }
 }
