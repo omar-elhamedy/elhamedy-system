@@ -58,7 +58,8 @@ class Inventory extends BaseController
         $model = new ProductMetaModel();
         $results = $model->update($id, [
             'unit_id' => $this->request->getPost('unit'),
-            'storage_id' => $this->request->getPost('storage')
+            'storage_id' => $this->request->getPost('storage'),
+            'price_calc_method' => $this->request->getPost('product_price_calc')
         ]);
         if (!$results){
             return redirect()

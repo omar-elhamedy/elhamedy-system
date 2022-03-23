@@ -42,7 +42,15 @@ use CodeIgniter\I18n\Time;
 
 <?php endif; ?>
 <section>
-    <h4>قائمة المنتجات</h4>
+
+    <div class="col-auto btn-block">
+        <a type="button" href="<?= site_url('/suppliers/' . $supplier->id . '/supply-items') ?>" class="btn btn-success mb-3">انشاء فاتورة توريد</a>
+    </div>
+
+    <div class="py-2">
+        <h4>قائمة المنتجات</h4>
+    </div>
+
 
             <section class="p-3 mx-auto">
                 <?= form_open('/suppliers/prices/update', ['id' => 'price']) ?>
@@ -51,7 +59,8 @@ use CodeIgniter\I18n\Time;
                     <tr>
                         <th scope="col">اسم المنتج</th>
                         <th scope="col">سعر المنتج</th>
-                        <th scope="col">العملية</th>
+                        <th scope="col">الوحدة</th>
+
                         <th scope="col">اخر تاريخ توريد</th>
                     </tr>
                     </thead>
@@ -59,37 +68,45 @@ use CodeIgniter\I18n\Time;
 
                     <?php foreach ($products as $product): ?>
 
-                        <?php if (getProductColorId($product->product_id) === '1'): ?>
+                    <?php if (getPriceCalcMethod($product->product_id) === '0'): ?>
 
-                         <?php if (!allProductsHasSameType(getAllProductsBySize($product->product_id))): ?>
+                        <?= view('/Supplier/table-View/1', ['product' => $product]) ?>
 
-                                    <?php if (!empty(getAllProductsByColor($product->product_id))): ?>
-                                        <?php foreach (getAllProductsByColor($product->product_id) as $item): ?>
-                                        <tr>
-                                            <td><?= getMaterialName($item->material_id) . ' ' . getBrandName($item->brand_id) . ' ' . getColorName($item->color_id) . ' ' . getTypeName($item->type_id)?></td>
-                                            <td><input type="number" name="color['<?= $item->color_id ?>']" value="<?= getPriceOf($item->id) ?>" onmousewheel="onWheel()" min="1" placeholder="السعر" class="form-control wheelable" ></td>
-                                            <td>
-                                                <div class="btn-toolbar" role="group">
-                                                <?= form_open('settings/product/edit/' . $product->id, ['id' => 'suppliy-' . $product->id]) ?> <button type="submit" form="<?= 'suppliy-' . $product->id ?>" class="btn btn-success mb-3 mx-2">توريد</button><?= form_close() ?>
-                                                </div>
-                                            </td>
-                                            <td><?= Time::parse($item->updated_at_product , 'America/Chicago', 'ar_eg')->toLocalizedString(' d MMM, yyyy') ?></td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
+                        <?= view('/Supplier/table-view/0', ['product' => $product])?>
 
-                                    <?php else: ?>
+                        <?= view('/Supplier/table-view/2', ['product' => $product])?>
+
+
+
+
+
+
+
+                    <?php elseif (getPriceCalcMethod($product->product_id) === '1'): ?>
+
+                            <?php if (!allProductsHasSameType(getAllProductsBySize($product->product_id))): ?>
 
                                 <?php if (!empty(getAllProductsByColor($product->product_id))): ?>
                                     <?php foreach (getAllProductsByColor($product->product_id) as $item): ?>
                                         <tr>
-                                            <td><?= getMaterialName($item->material_id) . ' ' . getBrandName($item->brand_id) . ' ' . getColorName($item->color_id) . ' ' . getTypeName($item->type_id)?></td>
-                                            <td><input type="number" name="type['<?= $item->type_id ?>'][colors]['<?= $item->color_id ?>']" value="<?= getPriceOf($item->id) ?>" onmousewheel="onWheel()" min="1" placeholder="السعر" class="form-control wheelable" ></td>
-                                            <td>
-                                                <div class="btn-toolbar" role="group">
-                                                    <?= form_open('settings/product/edit/' . $product->id, ['id' => 'suppliy-' . $product->id]) ?> <button type="submit" form="<?= 'suppliy-' . $product->id ?>" class="btn btn-success mb-3 mx-2">توريد</button><?= form_close() ?>
-                                                </div>
-                                            </td>
+                                            <td><a href="<?= site_url('inv/edit/' . $product->product_id) ?>"><?= getMaterialName($item->material_id) . ' ' . getBrandName($item->brand_id) . ' ' . getColorName($item->color_id) . ' ' . getTypeName($item->type_id)?></a></td>
+                                            <td><input type="number" step="0.01" name="color[<?= $item->color_id ?>]" value="<?= getPriceOf($item->id) ?>" onmousewheel="onWheel()" min="1" placeholder="السعر" class="form-control wheelable" ></td>
+                                            <td>سعر ال<?= getUnitName($item->unit_id) ?></td>
+
+                                            <td><?= Time::parse($item->updated_at_product , 'America/Chicago', 'ar_eg')->toLocalizedString(' d MMM, yyyy') ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+
+                            <?php else: ?>
+
+                                <?php if (!empty(getAllProductsByColor($product->product_id))): ?>
+                                    <?php foreach (getAllProductsByColor($product->product_id) as $item): ?>
+                                        <tr>
+                                            <td><a href="<?= site_url('inv/edit/' . $product->product_id) ?>"><?= getMaterialName($item->material_id) . ' ' . getBrandName($item->brand_id) . ' ' . getColorName($item->color_id) . ' ' . getTypeName($item->type_id)?></a></td>
+                                            <td><input type="number" step="0.01" name="type[<?= $item->type_id ?>][colors][<?= $item->color_id ?>]" value="<?= getPriceOf($item->id) ?>" onmousewheel="onWheel()" min="1" placeholder="السعر" class="form-control wheelable" ></td>
+                                            <td>سعر ال<?= getUnitName($item->unit_id) ?></td>
+
                                             <td><?= Time::parse($item->updated_at_product , 'America/Chicago', 'ar_eg')->toLocalizedString(' d MMM, yyyy') ?></td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -97,67 +114,22 @@ use CodeIgniter\I18n\Time;
 
                             <?php endif; ?>
 
-                        <?php endif; ?>
-                        <?php if (getProductColorId($product->product_id) === '0'): ?>
-
-                            <?php if (!empty(getAllProductsBySize($product->product_id))): ?>
-
-
-                            <?php if (!allProductsHasSameType(getAllProductsBySize($product->product_id))): ?>
-
-                                <?php foreach (getAllProductsBySize($product->product_id) as $item): ?>
-                                    <tr>
-                                        <td><?= getMaterialName($item->material_id) . ' ' . getBrandName($item->brand_id) . ' ' . getSizeName($item->size_id)  . ' ' . getTypeName($item->type_id) ?></td>
-                                        <td><input type="number" name="sizes['<?= $item->size_id ?>']" value="<?= getPriceOf($item->id) ?>" onmousewheel="onWheel()" min="1" placeholder="السعر" class="form-control wheelable" ></td>
-                                        <td>
-                                            <div class="btn-toolbar" role="group">
-                                                <?= form_open('settings/product/edit/' . $product->id, ['id' => 'suppliy-' . $product->id] ) ?> <button type="submit" form="<?= 'suppliy-' . $product->id ?>" class="btn btn-success mb-3 mx-2">توريد</button><?= form_close() ?>
-                                            </div>
-                                        </td>
-                                        <td><?= Time::parse($item->updated_at_product , 'America/Chicago', 'ar_eg')->toLocalizedString(' d MMM, yyyy')?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-
-                            <?php else: ?>
-
-                                    <?php foreach (getAllProductsBySize($product->product_id) as $item): ?>
-                                        <tr>
-                                            <td><?= getMaterialName($item->material_id) . ' ' . getBrandName($item->brand_id) . ' ' . getSizeName($item->size_id)  . ' ' . getTypeName($item->type_id) ?></td>
-                                            <td><input type="number"  name="type['<?= $item->type_id ?>'][sizes][<?= $item->size_id ?>]" value="<?= getPriceOf($item->id) ?>" onmousewheel="onWheel()" min="1" placeholder="السعر" class="form-control wheelable" ></td>
-                                            <td>
-                                                <div class="btn-toolbar" role="group">
-                                                    <?= form_open('settings/product/edit/' . $product->id, ['id' => 'suppliy-' . $product->id])   ?> <button type="submit" form="<?= 'suppliy-' . $product->id ?>"  class="btn btn-success mb-3 mx-2">توريد</button><?= form_close() ?>
-                                                </div>
-                                            </td>
-                                            <td><?= Time::parse($item->updated_at_product , 'America/Chicago', 'ar_eg')->toLocalizedString(' d MMM, yyyy')?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-
-                            <?php endif; ?>
-
-
-                            <?php endif; ?>
-
-                        <?php endif; ?>
-
-                        <?php if (getProductColorId($product->product_id) === '2'): ?>
+                    <?php elseif (getPriceCalcMethod($product->product_id) === '2'): ?>
 
                             <?php if (!empty(getAllProducts($product->product_id))): ?>
                                 <?php foreach (getAllProducts($product->product_id) as $item): ?>
                                     <tr>
-                                        <td><?= getMaterialName($item->material_id) . ' ' . getBrandName($item->brand_id) . ' ' . getSizeName($item->size_id)  . ' ' . getTypeName($item->type_id) ?></td>
-                                        <td><input type="number" name="<?= $item->id ?>" value="<?= getPriceOf($item->id) ?>" onmousewheel="onWheel()" min="1" placeholder="السعر" class="form-control wheelable" ></td>
-                                        <td>
-                                            <div class="btn-toolbar" role="group">
-                                                <?= form_open('settings/product/edit/' . $product->id, ['id' => 'suppliy-' . $product->id])  ?> <button type="submit"  form="<?= 'suppliy-' . $product->id ?>"  class="btn btn-success mb-3 mx-2">توريد</button><?= form_close() ?>
-                                            </div>
-                                        </td>
+                                        <td><a href="<?= site_url('inv/edit/' . $product->product_id) ?>"><?= getMaterialName($item->material_id) . ' ' . getBrandName($item->brand_id) . ' ' . getSizeName($item->size_id) . ' ' .  getColorName($item->color_id)  . ' ' . getTypeName($item->type_id) ?></a></td>
+                                        <td><input type="number" step="0.01" name="<?= $item->id ?>" value="<?= getPriceOf($item->id) ?>" onmousewheel="onWheel()" min="1" placeholder="السعر" class="form-control wheelable" ></td>
+                                        <td>سعر ال<?= getUnitName($item->unit_id) ?></td>
+
                                         <td><?= Time::parse($item->updated_at_product , 'America/Chicago', 'ar_eg')->toLocalizedString(' d MMM, yyyy')?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>
 
-                        <?php endif; ?>
+                    <?php endif; ?>
+
 
                     <?php endforeach; ?>
                     </tbody>
@@ -168,6 +140,8 @@ use CodeIgniter\I18n\Time;
     </div>
     <?= form_close() ?>
 </section>
+
+
 
 
 <?= $this->endSection(); ?>

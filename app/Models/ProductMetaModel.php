@@ -22,7 +22,8 @@ class ProductMetaModel extends Model
         'size_collection_id',
         'brand_id',
         'unit_id',
-        'storage_id'
+        'storage_id',
+        'price_calc_method'
     ];
 
     // Dates
@@ -78,6 +79,7 @@ class ProductMetaModel extends Model
                     'unit_id' => $product->unit_id,
                     'meta_id' => $product->id,
                     'storage_id' => $product->storage_id,
+
                     'QTY' => 0
                 ]);
             } else {

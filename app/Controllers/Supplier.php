@@ -33,7 +33,7 @@ class Supplier extends BaseController
             'bank_account' => $this->request->getPost('bank_account')
         ];
         $result = $supplierModel->insert($supplierData);
-        if ($result === false){
+        if ($result === false) {
             return redirect()
                 ->back()
                 ->withInput()
@@ -41,7 +41,7 @@ class Supplier extends BaseController
                 ->with('warning', 'خطأ بالبيانات');
 
         } else {
-            foreach ($this->request->getPost('products') as $product){
+            foreach ($this->request->getPost('products') as $product) {
                 $relationData = [
                     'supplier_id' => $supplierModel->getInsertID(),
                     'product_id' => $product
@@ -65,49 +65,82 @@ class Supplier extends BaseController
     {
         $productModel = new ProductModel();
 
-        foreach ($this->request->getPost() as $key=>$values){
-            if ($key != 'type'){
+        foreach ($this->request->getPost() as $key => $values) {
+            if ($key != 'type') {
                 $update = $productModel->update($key, [
                     'price' => $values
                 ]);
-                return $this->redirect($update, $productModel);
-            } else {
-                if ($key === 'type'){
-                    foreach ($values as $type =>$value){
+                if (!$update) {
+                    return redirect()
+                        ->back()
+                        ->with('error', $productModel->errors())
+                        ->with('warning', 'خطأ بالتحديث');
+                }
+            } elseif ($key === 'type') {
+                foreach ($values as $type => $value) {
 
-                        if (isset($value['sizes'])){
-                            foreach ($value['sizes'] as $size => $price){
-                                $update = $productModel->updateAllWithTypeAndSize($price,$type,$size);
-                                return $this->redirect($update, $productModel);
+                    if (isset($value['sizes'])) {
+                        foreach ($value['sizes'] as $size => $price) {
+                            $update = $productModel->updateAllWithTypeAndSize($price, $type, $size);
+                            if (!$update) {
+                                return redirect()
+                                    ->back()
+                                    ->with('error', $productModel->errors())
+                                    ->with('warning', 'خطأ بالتحديث');
                             }
+                        }
 
-                        } elseif (isset($value['colors'])){
-                            foreach ($value['colors'] as $color => $price){
-                                $update =  $productModel->updateAllWithTypeAndColor($price, $type, $color);
+                    } elseif (isset($value['colors'])) {
+                        foreach ($value['colors'] as $color => $price) {
+                            $update = $productModel->updateAllWithTypeAndColor($price, $type, $color);
 
-                                return $this->redirect($update, $productModel);
+                            if (!$update) {
+                                return redirect()
+                                    ->back()
+                                    ->with('error', $productModel->errors())
+                                    ->with('warning', 'خطأ بالتحديث');
                             }
                         }
                     }
-                } elseif ($key === 'sizes'){
-                    foreach ($values as $size => $price){
-                        $update = $productModel->updateAllWithSize($price, $size);
-                        return $this->redirect($update, $productModel);
+                }
+            } elseif ($key === 'sizes') {
+                foreach ($values as $size => $price) {
+                    $update = $productModel->updateAllWithSize($price, $size);
+                    if (!$update) {
+                        return redirect()
+                            ->back()
+                            ->with('error', $productModel->errors())
+                            ->with('warning', 'خطأ بالتحديث');
                     }
-                } elseif ($key === 'colors'){
-                    foreach ($values as $color => $price){
-                        $update =  $productModel->updateAllWithColor($price, $color);
-                        return $this->redirect($update, $productModel);
+                }
+            } elseif ($key === 'colors') {
+                foreach ($values as $color => $price) {
+                    $update = $productModel->updateAllWithColor($price, $color);
+                    if (!$update) {
+                        return redirect()
+                            ->back()
+                            ->with('error', $productModel->errors())
+                            ->with('warning', 'خطأ بالتحديث');
                     }
                 }
             }
-
-            return redirect()
-                ->back()
-                ->with('info', 'تم تحديث الاسعار');
-
         }
 
+        return redirect()
+            ->back()
+            ->with('info', 'تم تحديث الاسعار');
+
+
+    }
+
+    public function newSupply($supplierID)
+    {
+        $model = new SupplierModel();
+        $SupplierProductsModel = new SupplierProductModel();
+        return view('Supplier/new-supply', [
+            'supplier' => $model->find($supplierID),
+            'products' => $SupplierProductsModel->getProductsForSupplierId($supplierID)
+        ]);
     }
 
     public function view($supplierID)
@@ -118,7 +151,8 @@ class Supplier extends BaseController
 
         return view('/Supplier/view', [
             'supplier' => $model->find($supplierID),
-            'products' => $SupplierProductsModel->getProductsForSupplierId($supplierID)
+            'products' => $SupplierProductsModel->getProductsForSupplierId($supplierID),
+
         ]);
     }
     public function supply()
@@ -136,17 +170,5 @@ class Supplier extends BaseController
         return $this->response->setJSON($customers);
     }
 
-    public function redirect(bool $update, ProductModel $productModel): \CodeIgniter\HTTP\RedirectResponse
-    {
-        if (!$update) {
-            return redirect()
-                ->back()
-                ->with('error', $productModel->errors())
-                ->with('warning', 'خطأ بالتحديث');
-        } else {
-            return redirect()
-                ->back()
-                ->with('info', 'تم تحديث الاسعار');
-        }
-    }
+
 }

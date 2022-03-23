@@ -184,7 +184,7 @@ class ProductModel extends Model
 
     public function updateAllWithTypeAndColor($price,$type,$color)
     {
-        dd($this->where('type_id', $type)->findAll());
+
 
         foreach ($this->where('type_id', $type)->where('color_id', $color)->findAll() as $item){
 

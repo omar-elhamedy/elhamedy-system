@@ -58,6 +58,7 @@ $routes->get('/suppliers', 'Supplier::index');
 $routes->get('/suppliers/new', 'Supplier::new');
 $routes->get('/suppliers/(:num)', 'Supplier::view/$1');
 $routes->get('/suppliers/search', 'Supplier::search');
+$routes->get('/suppliers/(:num)/supply-items', 'Supplier::newSupply/$1');
 
 /* POST */
 $routes->post('/suppliers/new/add', 'Supplier::add');

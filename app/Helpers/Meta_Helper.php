@@ -79,6 +79,16 @@ if (! function_exists('getMetaProductsWithQTYCount')) {
     }
 }
 
+if (! function_exists('getPriceCalcMethod')) {
+    function getPriceCalcMethod($itemID)
+    {
+
+        $meta = new \App\Models\ProductMetaModel();
+
+
+        return $meta->find(intval($itemID))->price_calc_method;
+    }
+}
 
 if (! function_exists('getProductSizeName')){
     function getProductSizeName($id){

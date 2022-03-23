@@ -75,6 +75,14 @@
         </select>
     </div>
     <div class="col-2 btn-block">
+        <span class="p-2 d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">حساب السعر حسب</span>
+        <select class="form-select" aria-label="Default select example" name="product_price_calc" required>
+            <option value="0" <?= ($item->price_calc_method === '0') ? 'selected':'' ?>>اوتوماتك</option>
+            <option value="1" <?= ($item->price_calc_method === '1') ? 'selected':'' ?>>اللون</option>
+            <option value="2" <?= ($item->price_calc_method === '2') ? 'selected':'' ?>>المقاس</option>
+        </select>
+    </div>
+    <div class="col-2 btn-block">
         <span class="p-2 d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">اختر المخزن</span>
         <select class="form-select" aria-label="Default select example" name="storage" required>
             <option value="" selected>اختر المخزن</option>
