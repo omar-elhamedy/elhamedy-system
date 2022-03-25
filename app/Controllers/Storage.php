@@ -99,6 +99,16 @@ class Storage extends BaseController
 
     }
 
+    public function remove($productID)
+    {
+        $model = new ProductModel();
+
+        $model->removeQTY($productID, $this->request->getPost('qty'));
+
+        return redirect()->back()->with('info', 'تم تسجيل سحب ' . getProductName($productID));
+
+    }
+
     public function view($storageId)
     {
         $storageModel = new StorageModel();

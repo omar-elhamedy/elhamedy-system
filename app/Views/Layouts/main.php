@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="<?= site_url("/css/auto-complete.css")?>">
     <link rel="stylesheet" href="<?= site_url("/css/bootstrap-select.min.css")?>">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <title><?= $_ENV['COMPANY'] ?></title>
+    <title><?= $_ENV['COMPANY'] ?> - <?= $this->renderSection("title") ?></title>
 </head>
 <body>
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
@@ -37,16 +37,48 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= (url_is('/clients*')) ? 'active' : '' ?>" href="<?= site_url("/clients") ?>">
+                        <a  class="nav-link clients collapsed" id="collabse-menu" data-bs-toggle="collapse" data-bs-target="#clients" role="button" aria-expanded="false" aria-controls="clients" >
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                             العملاء
-                        </a>
+                        </a >
+                        <div class="collapse bg-dark  <?= (url_is('/clients*')) ? 'show' : '' ?>" id="clients">
+
+                                    <a class="nav-link text-white <?= (url_is('/clients')) ? 'sub-active' : '' ?>" aria-current="page" href="<?= site_url("/clients") ?>">
+
+                                        اليومية
+                                    </a>
+
+                                    <?php foreach (getAllClients() as $client): ?>
+
+                                    <a class="nav-link text-white <?= (url_is('/clients/' . $client->id)) ? 'sub-active' : '' ?>" aria-current="page" href="<?= site_url("/clients/" . $client->id) ?>">
+
+                                        <?= $client->name ?>
+                                    </a>
+                                    <?php endforeach; ?>
+
+                        </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= (url_is('/suppliers*')) ? 'active' : '' ?>" href="<?= site_url("/suppliers") ?>">
+                        <a  class="nav-link suppliers collapsed" id="collabse-menu" data-bs-toggle="collapse" data-bs-target="#suppliers" role="button" aria-expanded="false" aria-controls="suppliers" >
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                             الموردين
-                        </a>
+                        </a >
+                        <div class="collapse bg-dark  <?= (url_is('/suppliers*')) ? 'show' : '' ?>" id="suppliers">
+
+                            <a class="nav-link text-white <?= (url_is('/suppliers')) ? 'sub-active' : '' ?>" aria-current="page" href="<?= site_url("/suppliers") ?>">
+
+                                حسابات الموردين
+                            </a>
+
+                            <?php foreach (getAllSuppliers() as $supplier): ?>
+
+                                <a class="nav-link text-white <?= (url_is('/suppliers/' . $supplier->id)) ? 'sub-active' : '' ?>" aria-current="page" href="<?= site_url("/suppliers/" . $supplier->id) ?>">
+
+                                    <?= $supplier->name ?>
+                                </a>
+                            <?php endforeach; ?>
+
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= (url_is('/inv*')) ? 'active' : '' ?>" href="<?= site_url("/inv") ?>">
@@ -62,7 +94,8 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= (url_is('/currency*')) ? 'active' : '' ?>" href="<?= site_url("/currency") ?>">
-                            <i class="fa-solid fa-dollar-sign feather"></i> سعر العملة
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"  class="feather feather-shopping-cart" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                   سعر العملة
                         </a>
                     </li>
                     <li class="nav-item">
@@ -88,9 +121,14 @@
 
 </body>
 
+<script>
+    function onWheel() { }
+</script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/2c967f2d37.js" crossorigin="anonymous"></script>
+<script src="<?= site_url('/js/script.js') ?>"></script>
+
 <script src="<?= site_url('/js/bootstrap-select.min.js') ?>"></script>
 <script src="<?= site_url('/js/i18n/defaults-ar_AR.js') ?>"></script>
 </html>

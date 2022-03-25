@@ -53,7 +53,7 @@ class Client extends BaseController
         $client = $clientModel->find($id);
         $clientRecords = new ClientRecordsModel();
         $data = $clientRecords->getClientHistory($id);
-        $this->cachePage(21600);
+
        // dd($data);
         return view("Client/show", [
             'clientName' => $client->name,

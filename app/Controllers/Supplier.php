@@ -7,6 +7,8 @@ use App\Models\ProductMetaModel;
 use App\Models\ProductModel;
 use App\Models\SupplierModel;
 use App\Models\SupplierProductModel;
+use App\Models\SupplierRecordsItemsModel;
+use App\Models\SupplierRecordsModel;
 
 class Supplier extends BaseController
 {
@@ -21,6 +23,57 @@ class Supplier extends BaseController
         return view('Supplier/new', [
             'products' => $products->findAll()
         ]);
+    }
+
+    public function submitSupply($supplierID)
+    {
+        $recordsModel = new SupplierRecordsModel();
+        // insert record
+        $recordsModel->insert([
+            'supplier_id' => $supplierID,
+            'notes' => $this->request->getPost('notes')
+        ]);
+
+        $recordProductsModel = new SupplierRecordsItemsModel();
+        //insert records items
+        // add qty to item in inventory
+        $productModel = new ProductModel();
+        foreach ($this->request->getPost('products') as $key => $value){
+            $recordProductsModel->insert([
+                'record_id' => $recordsModel->getInsertID(),
+                'product_id' => $key,
+                'QTY' => $value['qty'],
+                'price' => $value['price']
+            ]);
+            $productModel->update($key, [
+                'price' => $value['price']
+            ]);
+            $productModel->addQTY($key, $value['qty']);
+        }
+
+        session()->remove('cart-' . $supplierID);
+
+        return redirect()->to('suppliers/' . $supplierID)->with('info', 'تم تسجيل الفاتورة بنجاح');
+
+
+    }
+
+    public function removeItemFromCart($id, $session)
+    {
+        $supplierID = ltrim($session, 'cart-');
+
+        $sessionID = $session;
+        $session = session()->get($session);
+        $key = array_search($id, $session);
+        if (false !== $key) {
+            unset($session[$key]);
+        }
+        session()->set($sessionID, $session);
+        return redirect()->to('suppliers/' . $supplierID . '/supply-items');
+        // get a copy of current cart
+        // remove $id
+        // save to session new cart
+
     }
 
     public function add()
@@ -141,6 +194,12 @@ class Supplier extends BaseController
             'supplier' => $model->find($supplierID),
             'products' => $SupplierProductsModel->getProductsForSupplierId($supplierID)
         ]);
+    }
+
+    public function addCart()
+    {
+        session()->set('cart-' . $this->request->getPost('supplier-id'), $this->request->getPost('products'));
+       return redirect()->to('suppliers/' . $this->request->getPost('supplier-id') . '/supply-items');
     }
 
     public function view($supplierID)

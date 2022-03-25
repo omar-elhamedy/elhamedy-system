@@ -1,5 +1,9 @@
 <?= $this->extend("Layouts/Main"); ?>
 
+<?= $this->section("title") ?>
+<?= $storage->name ?>
+<?= $this->endSection() ?>
+
 <?= $this->section("content"); ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -164,9 +168,9 @@
                     <div class="modal-body">
                         <span class="d-flex justify-content-between align-items-center mb-1 text-muted">الكمية المتوفرة: <?= $product->QTY ?> <?= getUnitName($product->unit_id) ?></span>
                             <span class="d-flex justify-content-between align-items-center mb-1 text-muted">كمية السحب</span>
-                            <?= form_open('/clients/add', ['class'=>'row g-3']) ?>
+                            <?= form_open('/storage/remove-item/' . $product->id, ['class'=>'row g-3']) ?>
                             <div class="col-auto">
-                                <input type="number" max="<?= $product->QTY ?>" onmousewheel="onWheel()" min="1" placeholder="الكمية" class="form-control wheelable" id="qty-<?= $product->id ?>" name="qty-<?= $product->id ?>" required>
+                                <input type="number" max="<?= $product->QTY ?>" onmousewheel="onWheel()" min="1" placeholder="الكمية" class="form-control wheelable" id="qty-<?= $product->id ?>" name="qty" required>
                             </div>
 
                     </div>

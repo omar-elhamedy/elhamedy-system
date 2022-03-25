@@ -230,5 +230,14 @@ class ProductModel extends Model
         return true;
     }
 
+    public function addQTY($id, $qty)
+    {
+        return $this->db->query("UPDATE `product` SET QTY=  QTY+$qty WHERE id=$id");
+    }
+    public function removeQTY($id, $qty)
+    {
+        return $this->db->query("UPDATE `product` SET QTY=  QTY-$qty WHERE id=$id");
+    }
+
 
 }

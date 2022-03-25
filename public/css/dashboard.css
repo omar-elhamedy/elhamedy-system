@@ -100,3 +100,29 @@ body {
     border-color: transparent;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
+
+
+
+.sub-active {
+    color: #999999 !important;
+}
+
+.suppliers:after {
+    content:'>';
+    float: left;
+    transition: all 0.5s;
+    color: #727272;
+}
+
+.clients:after{
+    content:'>';
+    float: left;
+    transition: all 0.5s;
+    color: #727272;
+}
+
+.collapsed:after {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}

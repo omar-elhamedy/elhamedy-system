@@ -45,8 +45,10 @@ $routes->get('currency', 'Home::currency');
 /* GET */
 $routes->get('/storage', 'Storage::index');
 $routes->get('/storage/view/(:num)', 'Storage::view/$1');
-$routes->post('/storage/view/export/(:num)', 'Storage::export/$1');
 
+
+$routes->post('/storage/view/export/(:num)', 'Storage::export/$1');
+$routes->post('/storage/remove-item/(:num)', 'Storage::remove/$1');
 /*
  * --------------------------------------------------------------------
  * Supplier Definitions
@@ -59,11 +61,15 @@ $routes->get('/suppliers/new', 'Supplier::new');
 $routes->get('/suppliers/(:num)', 'Supplier::view/$1');
 $routes->get('/suppliers/search', 'Supplier::search');
 $routes->get('/suppliers/(:num)/supply-items', 'Supplier::newSupply/$1');
+$routes->get('/suppliers/remove-item/(:num)/(:any)', 'Supplier::removeItemFromCart/$1/$2');
 
 /* POST */
 $routes->post('/suppliers/new/add', 'Supplier::add');
 $routes->post('/suppliers/supply', 'Supplier::supply');
-$routes->post('suppliers/prices/update', 'Supplier::update');
+$routes->post('/suppliers/prices/update', 'Supplier::update');
+$routes->post('/suppliers/add-to-cart', 'Supplier::addCart');
+$routes->post('/suppliers/submit-new-supply/(:num)', 'Supplier::submitSupply/$1');
+
 
 /*
  * --------------------------------------------------------------------

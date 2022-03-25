@@ -90,6 +90,22 @@ if (! function_exists('getPriceCalcMethod')) {
     }
 }
 
+if (! function_exists('getProductUnit')) {
+    function getProductUnit($id)
+    {
+        $model = new \App\Models\ProductModel();
+        return $model->find($id)->unit_id;
+    }
+}
+
+if (! function_exists('getProductName')) {
+    function getProductName($id)
+    {
+        $model = new \App\Models\ProductModel();
+        return $model->find($id)->name;
+    }
+}
+
 if (! function_exists('getProductSizeName')){
     function getProductSizeName($id){
         $model = new \App\Models\ProductMetaModel();
