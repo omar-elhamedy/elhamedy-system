@@ -2,8 +2,7 @@
 /vendor/
 /tests/
 .idea
-/app/.htaccess
-writable
+/writable/
 .env
 public/*.xlsx
 phpunit.xml.dist
