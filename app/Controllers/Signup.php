@@ -7,6 +7,24 @@ use App\Models\UserModel;
 
 class Signup extends BaseController
 {
+    public function __construct()
+    {
+        helper([
+            'form',
+            'date',
+            'size',
+            'storage',
+            'material',
+            'type',
+            'unit',
+            'brand',
+            'color',
+            'meta',
+            'client',
+            'bookmark'
+        ]);
+
+    }
     public function new()
     {
         return view('Signup/new');

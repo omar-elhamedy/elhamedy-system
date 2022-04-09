@@ -11,6 +11,24 @@ use voku\helper\HtmlDomParser;
 
 class Home extends BaseController
 {
+    public function __construct()
+    {
+        helper([
+            'form',
+            'date',
+            'size',
+            'storage',
+            'material',
+            'type',
+            'unit',
+            'brand',
+            'color',
+            'meta',
+            'client',
+            'bookmark'
+        ]);
+
+    }
     public function index()
     {
         return view("Stats/index");

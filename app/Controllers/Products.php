@@ -16,6 +16,7 @@ use App\Models\StorageModel;
 
 class Products extends BaseController
 {
+
     private $ProductModel;
     private $materialsModel;
     private $brandsModel;
@@ -41,6 +42,20 @@ class Products extends BaseController
         $this->storage = new storageModel();
         $this->sizeCollection = new sizeCollectionModel();
         $this->productMeta = new ProductMetaModel();
+        helper([
+            'form',
+            'date',
+            'size',
+            'storage',
+            'material',
+            'type',
+            'unit',
+            'brand',
+            'color',
+            'meta',
+            'client',
+            'bookmark'
+        ]);
     }
 
     public function index()

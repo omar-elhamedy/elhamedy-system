@@ -42,6 +42,20 @@ class Inventory extends BaseController
         $this->storage = new storageModel();
         $this->sizeCollection = new sizeCollectionModel();
         $this->paymentMethod = new PaymentMethodModel();
+        helper([
+            'form',
+            'date',
+            'size',
+            'storage',
+            'material',
+            'type',
+            'unit',
+            'brand',
+            'color',
+            'meta',
+            'client',
+            'bookmark'
+        ]);
     }
 
     public function index()
