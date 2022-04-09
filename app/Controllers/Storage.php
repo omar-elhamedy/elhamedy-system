@@ -19,24 +19,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Storage extends BaseController
 {
-    public function __construct()
-    {
-        helper([
-            'form',
-            'date',
-            'size',
-            'storage',
-            'material',
-            'type',
-            'unit',
-            'brand',
-            'color',
-            'meta',
-            'client',
-            'bookmark'
-        ]);
 
-    }
     public function index()
     {
         $model = new StorageModel();

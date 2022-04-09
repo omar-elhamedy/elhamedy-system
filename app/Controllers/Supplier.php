@@ -14,24 +14,7 @@ use App\Models\SupplierRecordsModel;
 
 class Supplier extends BaseController
 {
-    public function __construct()
-    {
-        helper([
-            'form',
-            'date',
-            'size',
-            'storage',
-            'material',
-            'type',
-            'unit',
-            'brand',
-            'color',
-            'meta',
-            'client',
-            'bookmark'
-        ]);
 
-    }
     public function index()
     {
         $model = new SupplierModel();

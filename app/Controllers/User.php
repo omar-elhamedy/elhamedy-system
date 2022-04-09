@@ -7,24 +7,7 @@ use App\Models\UserModel;
 
 class User extends BaseController
 {
-    public function __construct()
-    {
-        helper([
-            'form',
-            'date',
-            'size',
-            'storage',
-            'material',
-            'type',
-            'unit',
-            'brand',
-            'color',
-            'meta',
-            'client',
-            'bookmark'
-        ]);
 
-    }
     public function edit()
     {
         $model = new UserModel();

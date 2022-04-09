@@ -42,20 +42,7 @@ class Products extends BaseController
         $this->storage = new storageModel();
         $this->sizeCollection = new sizeCollectionModel();
         $this->productMeta = new ProductMetaModel();
-        helper([
-            'form',
-            'date',
-            'size',
-            'storage',
-            'material',
-            'type',
-            'unit',
-            'brand',
-            'color',
-            'meta',
-            'client',
-            'bookmark'
-        ]);
+
     }
 
     public function index()
