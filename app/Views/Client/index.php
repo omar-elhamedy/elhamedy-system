@@ -5,9 +5,13 @@ use CodeIgniter\I18n\Time;
 ?>
 <?= $this->extend("Layouts/Main"); ?>
 
+<?= $this->section("title") ?>
+اليومية
+<?= $this->endSection() ?>
+
 <?= $this->section("content"); ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">العملاء</h1>
+    <h1 class="h2">اليومية</h1>
 
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
@@ -29,12 +33,26 @@ use CodeIgniter\I18n\Time;
 
 <?php endif; ?>
 
+<?php if(session()->has('info')): ?>
+
+    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="success:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <div>
+            <?= session()->get('info') ?>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+<?php endif; ?>
 <section class="p-3">
     <span class="p-2 d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">اضافة مبلغ علي عميل</span>
     <?= form_open('/clients/add', ['class'=>'row g-3']) ?>
-        <div class="col-auto">
-            <input type="text" placeholder="الاسم" class="form-control" id="client_name" name="client_name" required>
-        </div>
+    <div class="col-auto">
+
+                      <input type="text" placeholder="الاسم" class="form-control" id="client_name" name="client_name" required>
+
+    </div>
+
         <div class="col-auto">
             <input type="text" class="form-control" name="amount_due" placeholder="المبلغ" required>
         </div>

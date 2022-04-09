@@ -1,5 +1,9 @@
 <?= $this->extend("Layouts/Main"); ?>
 
+<?= $this->section("title") ?>
+عميل جديد
+<?= $this->endSection() ?>
+
 <?= $this->section("content"); ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -7,7 +11,7 @@
 
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a type="button" href="<?= site_url('/clients') ?>" class="btn btn-sm btn-outline-secondary">رجوع</a>
+
 
         </div>
     </div>
@@ -35,7 +39,7 @@
     </div>
 
 <?php endif; ?>
-<?= form_open('/clients/new/add', ['class' => 'row g-3 my-3']) ?>
+<?= form_open('/clients/update', ['class' => 'row g-3 my-3']) ?>
 
         <div class="row mb-3">
             <div class="col-auto">
@@ -51,6 +55,7 @@
 </div>
     <div class="col-auto btn-block">
         <button type="submit" class="btn btn-primary mb-3">اضافةالعميل</button>
+        <a type="button" href="javascript:history.back()" class="btn btn-danger mb-3">الغاء</a>
     </div>
 
 

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 
 
+
 use App\Models\ProductBrandModel;
 use App\Models\ProductColorModel;
 use App\Models\ProductMaterialModel;
@@ -105,8 +106,31 @@ class Storage extends BaseController
 
         $model->removeQTY($productID, $this->request->getPost('qty'));
 
+        $loging = service('log');
+
+        $loging->logProductExport($productID, $this->request->getPost('qty'));
+
         return redirect()->back()->with('info', 'تم تسجيل سحب ' . getProductName($productID));
 
+    }
+
+    public function add($itemID)
+    {
+        $model = new ProductModel();
+        $model->addQTY($itemID, $this->request->getPost('qty'));
+        $loging = service('log');
+        $loging->logProductAdd($itemID, $this->request->getPost('qty'));
+        return redirect()->back()->with('info', 'تم تسجيل الاضافة ل' . getProductName($itemID));
+    }
+
+
+
+    public function product($productID)
+    {
+        $productModel = new ProductModel();
+        return view('Storage/product', [
+            'product' => $productModel->find($productID)
+        ]);
     }
 
     public function view($storageId)

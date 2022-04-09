@@ -46,7 +46,8 @@ class BaseController extends Controller
         'brand',
         'color',
         'meta',
-        'client'
+        'client',
+        'bookmark'
     ];
 
     /**

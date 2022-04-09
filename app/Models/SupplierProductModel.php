@@ -48,5 +48,23 @@ class SupplierProductModel extends Model
         return $this->where('supplier_id', $supplierId)->findAll();
     }
 
+    public function isProductAlreadyAttachedToSupplier($productID)
+    {
+        $result = $this->where('product_id', $productID)->first();
+        if ($result !== null){
+            return true;
+        }
+        return false;
+    }
+
+    public function isSupplierGotThisProduct($supplierId, $productID):bool
+    {
+        $result = $this->where('supplier_id',$supplierId)->having('product_id	', $productID)->first();
+        if ($result !== null){
+            return true;
+        }
+        return false;
+    }
+
 
 }

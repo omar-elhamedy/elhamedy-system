@@ -56,4 +56,9 @@ class ClientRecordsModel extends Model
     {
         return $this->where('client_id', $id)->orderBy('updated_at_client_record', 'DESC')->paginate();
     }
+
+    public function getClientHistoryByDate($id, $date)
+    {
+        return $this->where('client_id', $id)->like('created_at_client_record', $date)->orderBy('created_at_client_record', 'DESC')->paginate();
+    }
 }

@@ -11,6 +11,19 @@
 
 <section class="p-3">
     <div class="row g-5">
+
+        <div class="col-xs-6 col-sm-4 col-md-3">
+
+            <div class="card text-white bg-primary">
+                <div class="card-header">
+                    ضبط ملف لامستخدم
+                </div>
+                <div class="card-body">
+                    <a href="<?= site_url('/profile/edit/') ?>" class="btn btn-light">ضبط</a>
+                </div>
+            </div>
+        </div>
+
         <div class="col-xs-6 col-sm-4 col-md-3">
             <div class="card text-white bg-primary">
                 <div class="card-header">
@@ -39,6 +52,7 @@
             </div>
         </div>
     </div>
+
     </div>
 </section>
 <?= $this->endSection(); ?>

@@ -6,7 +6,7 @@
         <h1 class="h2">انشاء منتج جديد</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
-                <a type="button" href="<?= site_url('/settings/product/') ?>" class="btn btn-sm btn-outline-secondary">رجوع</a>
+
 
             </div>
         </div>
@@ -116,7 +116,9 @@
     <br>
     <div class="col-auto btn-block">
         <button type="submit" class="btn btn-success mb-3">انشاء</button>
+        <a type="button" href="javascript:history.back()" class="btn btn-danger mb-3">الغاء</a>
     </div>
+
     <?= form_close() ?>
 </section>
 

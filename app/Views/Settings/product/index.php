@@ -5,7 +5,7 @@
     <h1 class="h2">اعدادات المنتجات</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a type="button" href="<?= site_url('/settings') ?>" class="btn btn-sm btn-outline-secondary">رجوع</a>
+
 
         </div>
     </div>
@@ -22,6 +22,7 @@
                     <h5 class="card-title">انشاء منتج جديد</h5>
                     <br>
                     <a href="<?= site_url('/settings/product/new') ?>" class="btn btn-primary">انشاء</a>
+                    <a href="<?= site_url('/inv') ?>" class="btn btn-primary">عرض المنتجات</a>
                 </div>
             </div>
 

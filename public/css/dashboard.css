@@ -1,11 +1,13 @@
 body {
     font-size: 1.1rem;
+    font-family: Cairo, sans-serif;
 }
 
 .feather {
     width: 16px;
     height: 16px;
-    vertical-align: text-bottom;
+
+    vertical-align: center;
 }
 
 .filter-option-inner-inner {
@@ -15,7 +17,6 @@ body {
 /*
  * Sidebar
  */
-
 
 
 .sidebar {

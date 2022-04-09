@@ -17,6 +17,7 @@ class SupplierModel extends Model
     protected $allowedFields    = [
         'name',
         'phone_number',
+        'amount',
         'bank_account'
     ];
 
@@ -66,5 +67,28 @@ class SupplierModel extends Model
             return null;
         }
         return $this->getSupplierByName($name)->id;
+    }
+
+    public function getSupplierWithAmount()
+    {
+        return $this->where('amount >', '0')->findAll();
+    }
+
+    public function addAmount($supplierID, $amount)
+    {
+        return $this->db->query("UPDATE `supplier` SET amount=  amount+$amount WHERE id=$supplierID ");
+    }
+
+    public function removeAmount($supplierID, $amount)
+    {
+        return $this->db->query("UPDATE `supplier` SET amount=  amount-$amount WHERE id=$supplierID ");
+    }
+
+
+    public function getAmountTotal()
+    {
+
+        $result = $this->where('amount >', '0')->selectSum('amount')->first();
+        return $result->amount;
     }
 }

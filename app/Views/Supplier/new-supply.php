@@ -11,7 +11,7 @@
 
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a type="button" href="<?= site_url('/suppliers') ?>" class="btn btn-sm btn-outline-secondary">رجوع</a>
+
 
         </div>
     </div>
@@ -31,7 +31,7 @@
         <select class="selectpicker" aria-label="Default select example"  data-size="10" data-live-search="true" name="products[]" multiple required>
             <?php foreach ($products as $meta): ?>
                 <?php foreach (getAllProducts($meta->product_id) as $product): ?>
-                    <option value="<?= $product->id ?>" <?= (session()->has('cart-' . $supplier->id) && in_array($product->id, session()->get('cart-' . $supplier->id))) ? 'selected' : ' ' ?>><?= $product->name ?></option>
+                    <option value="<?= $product->id ?>" <?= (session()->has('cart-' . $supplier->id) && in_array($product->id, session()->get('cart-' . $supplier->id))) ? 'selected' : ' ' ?>><?= getUnitName(getProductUnit($product->id)) . ' ' . $product->name   ?></option>
                 <?php endforeach; ?>
             <?php endforeach; ?>
         </select>
@@ -58,7 +58,7 @@
             <th scope="col">نوع الوحدة</th>
             <th scope="col">سعر الوحدة</th>
 
-            <th scope="col">قيمة المنتج</th>
+            <th scope="col">قيمة المنتج التقديرية</th>
 
         </tr>
         </thead>
@@ -89,6 +89,11 @@
 
         </tbody>
     </table>
+
+    <div class="col-2 pb-5 btn-block">
+        <span class="p-2 d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">من فضلك قم بأدخال القيمة الفعلية للفاتورة من المورد</span>
+        <input class="form-control col-2" type="number"  name="actual_total" aria-label="With textarea" required>
+    </div>
 
 </section>
 

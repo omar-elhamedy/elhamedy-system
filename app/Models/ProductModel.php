@@ -24,6 +24,7 @@ class ProductModel extends Model
         'unit_id',
         'meta_id',
         'QTY',
+        'uid',
         'storage_id',
         'created_at_product',
         'updated_at_product',
@@ -54,6 +55,9 @@ class ProductModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    private $metaID;
+    private $metaItem;
+
     public function MetaModelExist($metaID): bool
     {
         if ($this->where('meta_id', $metaID)->first() === null){
@@ -63,6 +67,7 @@ class ProductModel extends Model
         }
 
     }
+
 
     public function getAllMetaProductsByColor($metaID)
     {
@@ -116,7 +121,7 @@ class ProductModel extends Model
         foreach ($requestedFilters as $key => $value){
             $query[]= " `$key`='$value' ";
         }
-        $query = "FROM `product` WHERE `storage_id` = '$storageId' AND " . implode('AND', $query);
+        $query = "FROM `product` WHERE `QTY` > 0 AND `storage_id` = '$storageId' AND " . implode('AND', $query);
         //dd($query);
         return $this->db->query("SELECT * " . $query)->getResult();
     }
@@ -236,6 +241,7 @@ class ProductModel extends Model
     }
     public function removeQTY($id, $qty)
     {
+
         return $this->db->query("UPDATE `product` SET QTY=  QTY-$qty WHERE id=$id");
     }
 

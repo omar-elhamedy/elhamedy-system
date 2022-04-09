@@ -10,3 +10,18 @@ if (! function_exists('getColorName')){
        return $model->find($id)->name;
     }
 }
+
+
+
+if (! function_exists('generateRGBColor')){
+    function generateRGBColor($amount){
+        $arrayOfColors = [];
+
+
+        for ($i =1;$i <= $amount; $i++){
+            array_push($arrayOfColors, 'rgba('.rand(80, 255).','.rand(100, 200).','.rand(64, 255).'0,.6)');
+        }
+
+        return json_encode($arrayOfColors);
+    }
+}

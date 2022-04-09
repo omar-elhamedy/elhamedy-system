@@ -8,6 +8,7 @@ class Report extends BaseController
 {
     public function index()
     {
+        getTop5MaterialinQTY();
         return view("Reports/index");
     }
 }

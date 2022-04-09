@@ -17,6 +17,7 @@ class SupplierRecordsModel extends Model
     protected $allowedFields    = [
         'supplier_id',
         'notes',
+        'actual_total',
         'created_at_supply_record',
         'updated_at_supply_record'
     ];
@@ -44,4 +45,14 @@ class SupplierRecordsModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getLastImport($id)
+    {
+        return $this->where('supplier_id' , $id)->orderBy('created_at_supply_record', 'DESC')->first();
+    }
+
+    public function getTotal()
+    {
+        
+    }
 }

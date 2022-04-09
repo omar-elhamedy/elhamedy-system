@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\ClientModel;
 use App\Models\ClientRecordsModel;
 use App\Models\PaymentMethodModel;
+use App\Models\PaymentMethodRecordsModel;
 
 class Client extends BaseController
 {
@@ -47,20 +48,49 @@ class Client extends BaseController
         }
     }
 
+    public function edit($clientID)
+    {
+        $model = new ClientModel();
+        return view('Client/edit', [
+            'client' => $model->find($clientID)
+        ]);
+    }
+
+    public function update($clientID)
+    {
+        $model = new ClientModel();
+       $result = $model->update($clientID, [
+            'name' => $this->request->getPost("client_name"),
+            'phone_number' => $this->request->getPost("phone_number")
+        ]);
+        if ($result === false) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', $model->errors())
+                ->with('warning', 'خطأ بالبيانات');
+
+        } else {
+            return redirect()->back()->with('info', 'تم تعديل بيانات المورد بنجاح');
+        }
+    }
+
     public function show($id)
     {
         $clientModel = new ClientModel();
         $client = $clientModel->find($id);
         $clientRecords = new ClientRecordsModel();
         $data = $clientRecords->getClientHistory($id);
-
+        if ($this->request->getGet('date') != null){
+            $data = $clientRecords->getClientHistoryByDate($id,$this->request->getGet('date') );
+        }
        // dd($data);
         return view("Client/show", [
-            'clientName' => $client->name,
-            'clientPhone' => $client->phone_number,
+            'client' => $client,
             'amount' => $client->amount,
             'data' => $data,
-            'pager' => $clientRecords->pager
+            'pager' => $clientRecords->pager,
+            'date' => $this->request->getGet('date')
         ]);
     }
 
@@ -112,6 +142,12 @@ class Client extends BaseController
             'client_id' => $clientId,
             'amount_paid' => $this->request->getPost("amount_paid"),
             'payment_method_id' => $this->request->getPost('payment_method')
+        ]);
+        $paymentMethodRecordModel = new PaymentMethodRecordsModel();
+        $paymentMethodRecordModel->insert([
+            'payment_method' => $this->request->getPost('payment_method'),
+            'amount' => $this->request->getPost("amount_paid"),
+            'client_id' => $clientId
         ]);
 
         if ($result === false){

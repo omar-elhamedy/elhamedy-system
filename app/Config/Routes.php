@@ -36,6 +36,8 @@ $routes->setAutoRoute(false);
 $routes->get('/', 'Home::index');
 $routes->get('currency', 'Home::currency');
 
+$routes->post('/bookmark/add', 'Home::addBookmark');
+$routes->post('/bookmark/remove', 'Home::removeBookmark');
 /*
  * --------------------------------------------------------------------
  * Storage Definitions
@@ -45,10 +47,23 @@ $routes->get('currency', 'Home::currency');
 /* GET */
 $routes->get('/storage', 'Storage::index');
 $routes->get('/storage/view/(:num)', 'Storage::view/$1');
+$routes->get('/storage/products/(:num)', 'Storage::product/$1');
 
 
 $routes->post('/storage/view/export/(:num)', 'Storage::export/$1');
 $routes->post('/storage/remove-item/(:num)', 'Storage::remove/$1');
+$routes->post('/storage/add-item/(:num)', 'Storage::add/$1');
+
+/*
+ * --------------------------------------------------------------------
+ * Accounts Definitions
+ * --------------------------------------------------------------------
+ */
+
+$routes->get('/accounts/(:num)', 'Accounts::index/$1');
+
+$routes->post('/accounts/(:num)/add', 'Accounts::add/$1');
+$routes->post('/accounts/(:num)/withdraw', 'Accounts::withdraw/$1');
 /*
  * --------------------------------------------------------------------
  * Supplier Definitions
@@ -62,15 +77,38 @@ $routes->get('/suppliers/(:num)', 'Supplier::view/$1');
 $routes->get('/suppliers/search', 'Supplier::search');
 $routes->get('/suppliers/(:num)/supply-items', 'Supplier::newSupply/$1');
 $routes->get('/suppliers/remove-item/(:num)/(:any)', 'Supplier::removeItemFromCart/$1/$2');
+$routes->get('/suppliers/(:num)/records', 'Supplier::recordsList/$1');
+$routes->get('/suppliers/(:num)/payments', 'Supplier::payments/$1');
+$routes->get('/suppliers/(:num)/record/(:num)', 'Supplier::recordsView/$1/$2');
+$routes->get('/suppliers/edit/(:num)', 'Supplier::edit/$1');
+$routes->get('/suppliers/remove/(:num)', 'Supplier::remove/$1');
 
 /* POST */
 $routes->post('/suppliers/new/add', 'Supplier::add');
+$routes->post('/suppliers/update/(:num)', 'Supplier::updateSupplier/$1');
+
 $routes->post('/suppliers/supply', 'Supplier::supply');
+$routes->post('/suppliers/show', 'Supplier::show');
+$routes->post('/suppliers/pay', 'Supplier::pay');
 $routes->post('/suppliers/prices/update', 'Supplier::update');
 $routes->post('/suppliers/add-to-cart', 'Supplier::addCart');
 $routes->post('/suppliers/submit-new-supply/(:num)', 'Supplier::submitSupply/$1');
 
 
+/*
+ * --------------------------------------------------------------------
+ * User Definitions
+ * --------------------------------------------------------------------
+ */
+
+$routes->get('/signup', 'Signup::new');
+$routes->get('/login', 'Login::new');
+$routes->get('/logout', 'Login::delete');
+$routes->get('/logout/confirm', 'Login::showLogoutMessage');
+$routes->post('/signup/create', 'Signup::create');
+$routes->post('/login/create', 'Login::create');
+$routes->get('/profile/edit', 'User::edit');
+$routes->post('/profile/update/(:num)', 'User::update/$1');
 /*
  * --------------------------------------------------------------------
  * Client Definitions
@@ -83,19 +121,26 @@ $routes->get('/clients', 'Client::index');
 $routes->get('/clients/new', 'Client::new');
 $routes->get('/clients/search' , 'Client::search');
 $routes->get('/clients/(:num)' , 'Client::show/$1');
-
+$routes->get('/clients/edit/(:num)', 'Client::edit/$1');
 
 /* POST */
 $routes->post('/clients/add', 'Client::create');
 $routes->post('/clients/pay', 'Client::paid');
 $routes->post('/clients/new/add', 'Client::addClient');
 $routes->post('/clients/show', 'Client::getClientByName');
-
+$routes->post('/clients/update/(:num)', 'Client::update/$1');
 
 $routes->get('/reports', 'Report::index');
 $routes->get('/settings', 'Settings::index');
 
+/*
+ * --------------------------------------------------------------------
+ * Api Definitions
+ * --------------------------------------------------------------------
+ */
 
+$routes->get('/api/products/all', 'Api::index');
+$routes->get('/api/products/top', 'Api::getTopProducts');
 
 
 /*
@@ -106,7 +151,7 @@ $routes->get('/settings', 'Settings::index');
 
 /* GET */
 $routes->get('/inv', 'Inventory::index');
-$routes->get('/inv/suppliers', 'Inventory::suppliers');
+
 $routes->add('/inv/delete/(:num)', 'Inventory::delete/$1');
 $routes->get('/inv/edit/(:num)', 'Inventory::edit/$1');
 $routes->post('/inv/update/(:num)', 'Inventory::update/$1');

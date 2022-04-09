@@ -59,6 +59,7 @@ class Products extends BaseController
                 $this->request->getPost('color'),
                 $this->request->getPost('size-collection')
             ),
+            'price_calc_method' => $this->request->getPost('product_price_calc'),
             'material_id' => $this->request->getPost('material'),
             'brand_id' => $this->request->getPost('brand'),
             'type_id' => $this->request->getPost('type'),
@@ -86,6 +87,12 @@ class Products extends BaseController
 
         }
 
+    }
+
+    private function generateProductID($material, $brand, $type, $unit, $color, $sizeCollection, $storage): string
+    {
+        $uid = "$material$brand$type$unit$color$sizeCollection$storage";
+        return $uid;
     }
 
     private function generateProductUID($material, $brand, $type, $unit, $color, $sizeCollection): string
@@ -127,6 +134,7 @@ class Products extends BaseController
                     foreach ($this->colorModel->getWhiteAndBlack() as $color){
                         $this->ProductModel->insert([
                             'name' => $this->generateName($productMeta->material_id, $productMeta->brand_id, null, $color,$productMeta->type_id),
+                            'uid' => $this->generateProductID($productMeta->material_id, $productMeta->brand_id, $productMeta->type_id, $productMeta->unit_id, $color,0, $productMeta->storage_id),
                             'color_id' => $color,
                             'type_id' => $productMeta->type_id,
                             'material_id' => $productMeta->material_id,
@@ -144,6 +152,7 @@ class Products extends BaseController
                         $this->ProductModel->insert([
                             'name' => $this->generateName($productMeta->material_id, $productMeta->brand_id, null, $color->id,$productMeta->type_id),
                             'color_id' => $color->id,
+                            'uid' => $this->generateProductID($productMeta->material_id, $productMeta->brand_id, $productMeta->type_id, $productMeta->unit_id, $color,0, $productMeta->storage_id),
                             'type_id' => $productMeta->type_id,
                             'material_id' => $productMeta->material_id,
                             'size_id' => null,
@@ -159,6 +168,7 @@ class Products extends BaseController
                     $this->ProductModel->insert([
                         'name' => $this->generateName($productMeta->material_id, $productMeta->brand_id, null, null,$productMeta->type_id),
                         'color_id' => null,
+                        'uid' => $this->generateProductID($productMeta->material_id, $productMeta->brand_id, $productMeta->type_id, $productMeta->unit_id, $color,0, $productMeta->storage_id),
                         'type_id' => $productMeta->type_id,
                         'material_id' => $productMeta->material_id,
                         'size_id' => null,
@@ -179,6 +189,7 @@ class Products extends BaseController
                         $this->ProductModel->insert([
                             'name' => $this->generateName($productMeta->material_id, $productMeta->brand_id, $size, $color,$productMeta->type_id),
                             'color_id' => $color,
+                            'uid' => $this->generateProductID($productMeta->material_id, $productMeta->brand_id, $productMeta->type_id, $productMeta->unit_id, $color,$size, $productMeta->storage_id),
                             'type_id' => $productMeta->type_id,
                             'material_id' => $productMeta->material_id,
                             'size_id' => $size,
@@ -196,6 +207,7 @@ class Products extends BaseController
                             'name' => $this->generateName($productMeta->material_id, $productMeta->brand_id, $size, $color->id,$productMeta->type_id),
                             'color_id' => $color->id,
                             'type_id' => $productMeta->type_id,
+                            'uid' => $this->generateProductID($productMeta->material_id, $productMeta->brand_id, $productMeta->type_id, $productMeta->unit_id, $color,$size, $productMeta->storage_id),
                             'material_id' => $productMeta->material_id,
                             'size_id' => $size,
                             'brand_id' => $productMeta->brand_id,
@@ -211,6 +223,7 @@ class Products extends BaseController
                         'name' => $this->generateName($productMeta->material_id, $productMeta->brand_id, $size, null,$productMeta->type_id),
                         'color_id' => null,
                         'type_id' => $productMeta->type_id,
+                        'uid' => $this->generateProductID($productMeta->material_id, $productMeta->brand_id, $productMeta->type_id, $productMeta->unit_id, 0,$size, $productMeta->storage_id),
                         'material_id' => $productMeta->material_id,
                         'size_id' => $size,
                         'brand_id' => $productMeta->brand_id,

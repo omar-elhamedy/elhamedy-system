@@ -6,7 +6,7 @@
     <h1 class="h2"><?= $title ?></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a type="button" href="<?= site_url('/settings/product/' . $type) ?>" class="btn btn-sm btn-outline-secondary">رجوع</a>
+
 
         </div>
     </div>
@@ -45,8 +45,9 @@
     </div>
 </div>
 
+<div class="col-auto btn-block">
 <?php foreach ($Availablesizes as $size): ?>
-<div class="col-2 btn-block">
+
     <div class="form-check form-check-inline">
         <?php $checked = '';
         if (json_decode($data->sizes) !== null): ?>
@@ -55,12 +56,19 @@
         <input class="form-check-input" type="checkbox" name="sizes[]" id="inlineCheckbox<?= $size->id ?>" value="<?= $size->id ?>"  <?= $checked ?>>
         <label class="form-check-label" for="inlineCheckbox<?= $size->id ?>"><?= $size->name ?></label>
     </div>
-</div>
+
 <?php endforeach;?>
+</div>
 
 <div class="col-auto btn-block">
     <button type="submit" class="btn btn-primary mb-3"><?= $btnText ?></button>
+
 </div>
+<div class="col-auto btn-block">
+
+    <a type="button" href="javascript:history.back()" class="btn btn-danger mb-3">الغاء</a>
+</div>
+
 <?= form_close() ?>
 
 

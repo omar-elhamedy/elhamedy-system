@@ -9,9 +9,9 @@
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
             <a type="button" href="<?= current_url() ?>" class="btn btn-sm btn-outline-secondary">تحديث</a>
-            <a type="button" href="<?= site_url('/inv/suppliers') ?>" class="btn btn-sm btn-outline-secondary">الموردين</a>
+
             <a type="button" href="<?= site_url('/settings/product/new') ?>" class="btn btn-sm btn-outline-secondary">اضافة منتج</a>
-            <a type="button" href="<?= site_url('/inv/new') ?>" class="btn btn-sm btn-outline-secondary">توريد بضاعة</a>
+
         </div>
     </div>
 </div>

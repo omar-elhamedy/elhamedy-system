@@ -11,7 +11,7 @@
 
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a type="button" href="<?= site_url('/suppliers') ?>" class="btn btn-sm btn-outline-secondary">رجوع</a>
+
 
         </div>
     </div>
@@ -63,18 +63,21 @@
 
 <div class="col-2 btn-block">
     <span class="p-2 d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">اختر المنتجات المورة من قبل هذا المورد</span>
-
+    <span class="p-2 d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">ملحوظة: لن تستطيع اختار منتج مسجل لمورد من قبل</span>
     <select class="selectpicker" aria-label="Default select example" name="products[]" multiple required>
 
         <?php foreach ($products as $product): ?>
-            <option value="<?= $product->id ?>"><?= $product->name ?></option>
+            <option value="<?= $product->id ?>" <?= (isProductAlreadyAttachedToSupplier($product->id) ?'disabled':'') ?>><?= $product->name ?></option>
         <?php endforeach; ?>
     </select>
+
+
+    <div class="col-auto pt-5 btn-block">
+        <button type="submit" class="btn btn-primary mb-3">اضافةالمورد</button>
+        <a type="button" href="javascript:history.back()" class="btn btn-danger mb-3">الغاء</a>
+    </div>
 </div>
 
-    <div class="col-auto btn-block">
-        <button type="submit" class="btn btn-primary mb-3">اضافةالمورد</button>
-    </div>
 
 
 

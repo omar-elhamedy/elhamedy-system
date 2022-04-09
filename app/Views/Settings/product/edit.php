@@ -6,7 +6,7 @@
     <h1 class="h2"><?= $title ?></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <a type="button" href="<?= site_url('/settings/product/' . $type ) ?>" class="btn btn-sm btn-outline-secondary">رجوع</a>
+
 
         </div>
     </div>
@@ -45,7 +45,11 @@
 
 <div class="col-auto btn-block">
     <button type="submit" class="btn btn-primary mb-3"><?= $btnText ?></button>
+    <a type="button" href="javascript:history.back()" class="btn btn-danger mb-3">الغاء</a>
 </div>
+
+
+
 <?= form_close() ?>
 
 

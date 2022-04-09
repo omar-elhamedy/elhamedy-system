@@ -33,6 +33,18 @@ use CodeIgniter\I18n\Time;
 
 <?php endif; ?>
 
+<?php if(session()->has('info')): ?>
+
+    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="success:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <div>
+            <?= session()->get('info') ?>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+<?php endif; ?>
+
 <section class="p-3">
     <span class="p-2 d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">دفع دفعة</span>
     <?= form_open('/suppliers/pay', ['class'=>'row g-3']) ?>
@@ -77,7 +89,7 @@ use CodeIgniter\I18n\Time;
 <section class="p-3">
 
     <span class="p-2 d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">احصائيات</span>
-
+    <h4>اجمالي المبلغ الواجب دفعه: <?= $total ?> جنيه</h4>
 
 </section>
 
@@ -93,7 +105,15 @@ use CodeIgniter\I18n\Time;
         </tr>
         </thead>
         <tbody>
-
+            <?php foreach ($suppliers as $supplier): ?>
+                <tr>
+                    <td><?= $supplier->id ?></td>
+                    <td><a href="<?= site_url('/suppliers/' . $supplier->id) ?>"><?= $supplier->name ?></a></td>
+                    <td><?= $supplier->amount . ' جنيه'?></td>
+                    <td></td>
+                    <td><?= Time::parse( getLastImport($supplier->id)->created_at_supply_record, 'America/Chicago', 'ar_eg')->toLocalizedString(' d MMM, yyyy') ?></td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </section>
